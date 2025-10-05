@@ -1,0 +1,32 @@
+name: Problem-2 Scripts
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  run-scripts:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: problem-02-scripts
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run system health monitor
+        run: python monitor.py --cpu 85 --mem 85 --disk 90
+
+      - name: Run app health checker
+        env:
+          CHECK_URL: https://example.com        # change to your wisecow URL if you have one
+        run: python healthcheck.py --url "$CHECK_URL" --retries 2 --timeout 5
