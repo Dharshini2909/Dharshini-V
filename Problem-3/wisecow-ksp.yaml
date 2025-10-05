@@ -1,0 +1,21 @@
+apiVersion: security.kubearmor.com/v1
+kind: KubeArmorPolicy
+metadata:
+  name: deny-sh-and-shadow-for-wisecow
+  namespace: default
+spec:
+  severity: 5
+  message: "Block shell spawn and /etc/shadow access from wisecow"
+  selector:
+    matchLabels:
+      app: wisecow
+  process:
+    matchPaths:
+      # Block interactive shells
+      - path: /bin/sh
+      - path: /bin/bash
+  file:
+    matchPaths:
+      # Block reading the password shadow file
+      - path: /etc/shadow
+  action: Block
