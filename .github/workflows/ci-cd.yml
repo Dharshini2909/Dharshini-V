@@ -21,5 +21,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./Problem-1
+          file: ./Problem-1/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/wisecow:latest
