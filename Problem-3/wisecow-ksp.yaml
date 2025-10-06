@@ -1,21 +1,18 @@
 apiVersion: security.kubearmor.com/v1
 kind: KubeArmorPolicy
 metadata:
-  name: deny-sh-and-shadow-for-wisecow
-  namespace: default
+  name: block-tmp-write
 spec:
-  severity: 5
-  message: "Block shell spawn and /etc/shadow access from wisecow"
   selector:
     matchLabels:
       app: wisecow
+  file:
+    matchDirectories:
+    - dir: /tmp/
+      recursive: true
   process:
     matchPaths:
-      # Block interactive shells
-      - path: /bin/sh
-      - path: /bin/bash
-  file:
-    matchPaths:
-      # Block reading the password shadow file
-      - path: /etc/shadow
+    - path: /bin/sh
+    - path: /usr/bin/sh
+    - path: /usr/bin/dash
   action: Block
